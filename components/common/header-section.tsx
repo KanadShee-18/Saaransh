@@ -1,7 +1,7 @@
 import Image from "next/image";
 import SAARANSH_LOGO from "@/public/images/saaransh-logo.png";
-import { Button } from "@/components/ui/button";
 import { NavLink } from "./nav-links";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export const Header = () => {
   const isLoggedIn = false;
@@ -20,21 +20,24 @@ export const Header = () => {
       </div>
       <div className="flex lg:justify-center lg:items-center gap-4 lg:gap-12 lg:flex-1">
         <NavLink href={"/pricing"}>Pricing</NavLink>
-        {isLoggedIn && <NavLink href={"/dashboard"}>Your Summaries</NavLink>}
+        <SignedIn>
+          <NavLink href={"/dashboard"}>Your Summaries</NavLink>
+        </SignedIn>
       </div>
 
       <div className="flex lg:justify-end">
-        {isLoggedIn ? (
+        <SignedIn>
           <div className="flex gap-2 items-center">
             <NavLink href={"/upload"}>Upload a PDF</NavLink>
             <div>Pro</div>
-            <Button>User</Button>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
-        ) : (
-          <div>
-            <NavLink href={"/sign-in"}>Sign In</NavLink>
-          </div>
-        )}
+        </SignedIn>
+        <SignedOut>
+          <NavLink href={"/sign-in"}>Sign In</NavLink>
+        </SignedOut>
       </div>
     </nav>
   );
