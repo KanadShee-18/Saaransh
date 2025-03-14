@@ -18,12 +18,12 @@ export const Header = () => {
           />
         </NavLink>
       </div>
-      <div className="flex lg:justify-center lg:items-center gap-4 lg:gap-12">
+      <div className="flex lg:justify-center lg:items-center gap-4 lg:gap-12 lg:flex-1">
         <NavLink href={"/pricing"}>Pricing</NavLink>
         {isLoggedIn && <NavLink href={"/dashboard"}>Your Summaries</NavLink>}
       </div>
 
-      <div className="flex lg:justify-end lg:flex-1">
+      <div className="flex lg:justify-end">
         {isLoggedIn ? (
           <div className="flex gap-2 items-center">
             <NavLink href={"/upload"}>Upload a PDF</NavLink>
