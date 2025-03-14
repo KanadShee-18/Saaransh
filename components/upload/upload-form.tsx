@@ -1,5 +1,6 @@
 "use client";
 
+import { generatePdfSummary } from "@/actions/upload-actions";
 import { UploadFormInput } from "@/components/upload/upload-form-input";
 import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
@@ -74,6 +75,9 @@ export const UploadForm = () => {
       ),
     });
 
+    // parse the pdf text
+    const summary = await generatePdfSummary(resp);
+    console.log("Summary: ", summary);
     // summarize the pdf using AI
     // save the summary to the database
     // redirect to the summary[id] page
