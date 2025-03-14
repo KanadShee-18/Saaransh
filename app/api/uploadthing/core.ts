@@ -5,20 +5,26 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-    pdfUploader: f({pdf: {maxFileSize: '32MB'}})
-    .middleware(async(req) => {
-        // get user info
-        const user = await currentUser();
-        if (!user){
-            throw new UploadThingError("Unauthorized");
-        }
-        return {userId: user.id}
+  pdfUploader: f({ pdf: { maxFileSize: "32MB" } })
+    .middleware(async (req) => {
+      // get user info
+      const user = await currentUser();
+      if (!user) {
+        throw new UploadThingError("Unauthorized");
+      }
+      return { userId: user.id };
     })
-    .onUploadComplete(async({metadata, file}) => {
-        console.log(`Upload complete for ${metadata.userId}`);
-        console.log("File Url", file.ufsUrl);
-        return {userId: metadata.userId, file}
-    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log(`Upload complete for ${metadata.userId}`);
+      console.log("File Url", file.ufsUrl);
+      return {
+        userId: metadata.userId,
+        file: {
+          url: file.ufsUrl,
+          name: file.name,
+        },
+      };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

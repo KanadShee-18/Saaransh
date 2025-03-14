@@ -50,8 +50,12 @@ export const UploadForm = () => {
       return;
     }
 
-    toast.message("Uploading PDF", {
-      description: "We're uploading your file, this may take a few seconds",
+    toast.message("🌨️Uploading PDF", {
+      description: (
+        <span className="text-rose-400 font-medium">
+          We're uploading your file, this may take a few seconds
+        </span>
+      ),
     });
 
     // upload the pdf to uploadthing
@@ -63,10 +67,6 @@ export const UploadForm = () => {
       return;
     }
 
-    // toast.loading("📄 Processing PDF", {
-    //   description: "Hang tight! Our AI is reading through your content! ✨",
-    // });
-
     toast.loading("📄 Processing PDF", {
       description: (
         <span className="text-rose-400 font-medium">
@@ -76,7 +76,9 @@ export const UploadForm = () => {
     });
 
     // parse the pdf text
-    const summary = await generatePdfSummary(resp);
+    const summary = await generatePdfSummary([
+      { serverData: resp[0].serverData },
+    ]);
     console.log("Summary: ", summary);
     // summarize the pdf using AI
     // save the summary to the database
