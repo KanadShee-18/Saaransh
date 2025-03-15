@@ -6,6 +6,7 @@ import { fetchExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
 import { formatFileNameAsTitle } from "@/utils/format-filename";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 interface PDFSummary {
   userId?: string;
@@ -116,7 +117,7 @@ export async function savePdfSummary({
 }: PDFSummary) {
   try {
     const sql = await getDatabaseConnection();
-    await sql`
+    const result = await sql`
       INSERT INTO pdf_summaries 
         (user_id, original_file_url, summary_text, title, file_name)
       VALUES 
@@ -126,15 +127,20 @@ export async function savePdfSummary({
           ${summary},
           ${title},
           ${fileName}
-        );
+        ) RETURNING id;
     `;
+    console.log("result saved in db: ", result);
     return {
       success: true,
       message: "PDF summary saved successfully!",
+      data: {
+        id: result[0].id,
+      },
     };
   } catch (error) {
     return {
       success: false,
+      data: null,
       message:
         error instanceof Error
           ? error.message
@@ -149,7 +155,13 @@ export async function storePdfSummaryAction({
   title,
   fileName,
 }: PDFSummary) {
-  let savePdfSummaryResponse;
+  // let savePdfSummaryResponse;
+  let savePdfSummaryResponse: {
+    success: boolean;
+    message: string;
+    data: { id: string } | null;
+  } | null = null;
+
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -165,16 +177,13 @@ export async function storePdfSummaryAction({
       title,
       fileName,
     });
+    console.log("savePdfSummaryResponse: ", savePdfSummaryResponse);
     if (!savePdfSummaryResponse) {
       return {
         success: false,
         message: "Failed to save PDF summary, please try again!",
       };
     }
-    return {
-      success: true,
-      message: "PDF summary saved successfully!",
-    };
   } catch (error) {
     return {
       success: false,
@@ -184,4 +193,17 @@ export async function storePdfSummaryAction({
           : "Problem occurred to store PDF in database!",
     };
   }
+
+  // revalidate our cache
+  if (savePdfSummaryResponse?.success && savePdfSummaryResponse?.data?.id) {
+    revalidatePath(`/summaries/${savePdfSummaryResponse.data.id}`);
+  }
+
+  return {
+    success: true,
+    message: "PDF summary saved successfully!",
+    data: {
+      id: savePdfSummaryResponse?.data?.id,
+    },
+  };
 }

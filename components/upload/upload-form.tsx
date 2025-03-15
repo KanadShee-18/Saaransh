@@ -9,6 +9,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import UploadFormInput from "@/components/upload/upload-form-input";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   file: z
@@ -22,6 +23,7 @@ const schema = z.object({
 });
 
 export const UploadForm = () => {
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -125,6 +127,9 @@ export const UploadForm = () => {
                 ),
               }
             );
+            formRef.current?.reset();
+            // redirect to the summary[id] page
+            router.push(`/summaries/${storedResult?.data?.id}`);
           } else {
             toast.message(
               <span className="text-rose-400 font-medium">
@@ -142,16 +147,13 @@ export const UploadForm = () => {
         }
         formRef.current?.reset();
       }
-      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.error("Error Occurred: ", error);
       formRef.current?.reset();
+    } finally {
+      setIsLoading(false);
     }
-
-    // summarize the pdf using AI
-    // save the summary to the database
-    // redirect to the summary[id] page
   };
   return (
     <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto">
