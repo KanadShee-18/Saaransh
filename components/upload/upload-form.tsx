@@ -71,6 +71,8 @@ export const UploadForm = () => {
         ),
       });
 
+      console.log("Upload started ...");
+
       // upload the pdf to uploadthing
       const resp = await startUpload([file]);
       if (!resp) {
@@ -88,6 +90,8 @@ export const UploadForm = () => {
           </span>
         ),
       });
+
+      console.log("Processing PDF text ...");
 
       // parse the pdf text
       const result = await generatePdfSummary([
@@ -108,6 +112,7 @@ export const UploadForm = () => {
         });
 
         if (data.summary) {
+          console.log("Saving summary to database ...");
           // save the summary to the database
           const storedResult = await storePdfSummaryAction({
             summary: data.summary,

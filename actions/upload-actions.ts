@@ -127,7 +127,7 @@ export async function savePdfSummary({
           ${summary},
           ${title},
           ${fileName}
-        ) RETURNING id;
+        ) RETURNING id, summary_text;
     `;
     console.log("result saved in db: ", result);
     return {
