@@ -5,6 +5,9 @@ import { DeleteBtn } from "@/components/summary/delete-button";
 import Link from "next/link";
 import { FileTextIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
+import { formatFileName } from "@/utils/format-filename";
+import { SUMMARY } from "@/utils/types";
 
 const SummaryHeader = ({
   fileUrl,
@@ -20,9 +23,11 @@ const SummaryHeader = ({
       <FileTextIcon className="!size-6 sm:!size-8 text-rose-500 mt-1" />
       <div className="flex-1 min-w-0">
         <h3 className="text-base xl:text-lg font-semibold text-gray-800 truncate w-4/5">
-          {title}
+          {title || formatFileName(fileUrl)}
         </h3>
-        <p className="tetx-sm text-gray-500">2024</p>
+        <p className="tetx-sm text-gray-500">
+          {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
+        </p>
       </div>
     </div>
   );
@@ -43,12 +48,14 @@ const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-export const SummaryCard = ({ summary }: { summary: any }) => {
+export const SummaryCard = ({ summary }: { summary: SUMMARY }) => {
+  console.log("Summary in card: ", summary);
+
   return (
     <div>
       <Card className="relative h-full">
         <div className="absolute top-2 right-2">
-          <DeleteBtn />
+          <DeleteBtn summaryId={summary.id} />
         </div>
         <Link href={`/summary/${summary.id}`} className="block p-4 sm:p-6">
           <div className="flex flex-col gap-3 sm:gap-4">
@@ -60,7 +67,6 @@ export const SummaryCard = ({ summary }: { summary: any }) => {
             <p className="tetx-sm sm:text-base pl-2 line-clamp-2 font-medium text-gray-600">
               {summary.summary_text}
             </p>
-            <p className="tetx-sm text-gray-500">2024</p>
             <div className="flex justify-between items-center mt-2 sm:mt-4">
               <StatusBadge status={summary.status} />
             </div>

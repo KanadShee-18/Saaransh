@@ -1,41 +1,22 @@
 import { BgGradient } from "@/components/common/bg-gradient";
 import { SummaryCard } from "@/components/summary/summary-card";
 import { Button } from "@/components/ui/button";
+import { getSummaries } from "@/lib/summaries";
+import { SUMMARY } from "@/utils/types";
+import { currentUser } from "@clerk/nextjs/server";
 import { ArrowRight, PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const user = await currentUser();
+  const userId = user?.id;
+  if (!userId) {
+    return redirect("/sign-in");
+  }
   const uploadLimit = 5;
-  const summaries = [
-    {
-      id: 1,
-      title: "The Future of AI",
-      summary_text:
-        "The future of AI is bright. It will be used to help us with our daily lives and make our lives easier.",
-      status: "completed",
-    },
-    {
-      id: 2,
-      title: "AI and the Future of Work",
-      summary_text:
-        "AI will change the way we work. It will be used to help us with our daily lives and make our lives easier.",
-      status: "completed",
-    },
-    {
-      id: 3,
-      title: "Challenges of AI",
-      summary_text:
-        "AI will change the way we work. It will be used to help us with our daily lives and make our lives easier.",
-      status: "completed",
-    },
-    {
-      id: 4,
-      title: "Digital Marketing Trends",
-      summary_text:
-        "Digital marketing is changing the way we market our products and services. It is becoming more important to have a strong online presence.",
-      status: "completed",
-    },
-  ];
+  const summaries: SUMMARY[] = await getSummaries(userId);
+
   return (
     <main className="min-h-screen">
       <BgGradient className="from-emerald-200 via-teal-200 to-cyan-200" />
@@ -84,9 +65,17 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 sm:px-0">
-            {summaries.map((summary, index) => (
-              <SummaryCard key={index} summary={summary} />
-            ))}
+            {summaries.length > 0 ? (
+              summaries.map((summary, index) => (
+                <SummaryCard key={index} summary={summary} />
+              ))
+            ) : (
+              <div className="col-span-full flex justify-center items-center mt-12">
+                <p className="text-gray-500">
+                  You haven&apos;t created any summaries yet.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

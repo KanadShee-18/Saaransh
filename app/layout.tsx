@@ -58,6 +58,13 @@ export default function RootLayout({
             richColors={true}
             position="top-right"
             className="!mt-16"
+            toastOptions={{
+              style: {
+                backgroundColor: "rgb(252,240,245)",
+                background:
+                  "linear-gradient(90deg, rgba(252,240,245,1) 0%, rgba(211,227,246,1) 100%)",
+              },
+            }}
           />
         </body>
       </html>
