@@ -1,4 +1,5 @@
 import { BgGradient } from "@/components/common/bg-gradient";
+import { EmptySummaryState } from "@/components/summary/empty-state";
 import { SummaryCard } from "@/components/summary/summary-card";
 import { Button } from "@/components/ui/button";
 import { getSummaries } from "@/lib/summaries";
@@ -70,10 +71,8 @@ export default async function DashboardPage() {
                 <SummaryCard key={index} summary={summary} />
               ))
             ) : (
-              <div className="col-span-full flex justify-center items-center mt-12">
-                <p className="text-gray-500">
-                  You haven&apos;t created any summaries yet.
-                </p>
+              <div className="col-span-full flex justify-center items-center">
+                <EmptySummaryState />
               </div>
             )}
           </div>
