@@ -76,7 +76,7 @@ export const UploadForm = () => {
         return;
       }
 
-      toast.loading("📄 Processing PDF", {
+      const processingToast = toast.loading("📄 Processing PDF", {
         description: (
           <span className="text-rose-400 font-medium">
             Hang tight! Our AI is reading through your content! ✨
@@ -90,9 +90,11 @@ export const UploadForm = () => {
       ]);
       console.log("Summary: ", result);
 
+      toast.dismiss(processingToast);
+
       const { data = null, message = null } = result || {};
       if (data) {
-        toast.success("⤵️ Saving PDF", {
+        toast.message("⤵️ Saving PDF", {
           description: (
             <span className="text-rose-400 font-medium">
               Hang tight! We're saving your summary! ✨
@@ -100,7 +102,11 @@ export const UploadForm = () => {
           ),
         });
         formRef.current?.reset();
+        if (data.summary) {
+          // save the summary to the database
+        }
       }
+      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.error("Error Occurred: ", error);
