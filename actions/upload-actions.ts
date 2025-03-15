@@ -1,8 +1,19 @@
 "use server";
 
+import { getDatabaseConnection } from "@/lib/db";
 import { generateSummaryFromGemini } from "@/lib/geminiai";
 import { fetchExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
+import { formatFileNameAsTitle } from "@/utils/format-filename";
+import { auth } from "@clerk/nextjs/server";
+
+interface PDFSummary {
+  userId?: string;
+  fileUrl: string;
+  summary: string;
+  title: string;
+  fileName: string;
+}
 
 export async function generatePdfSummary(
   uploadResponse: [
@@ -76,10 +87,13 @@ export async function generatePdfSummary(
       };
     }
 
+    const formattedFileName = formatFileNameAsTitle(pdfName);
+
     return {
       success: true,
       message: "Summary has been generated successfully!",
       data: {
+        title: formattedFileName,
         summary,
       },
     };
@@ -89,6 +103,85 @@ export async function generatePdfSummary(
       success: false,
       message: "File Upload Failed!",
       data: null,
+    };
+  }
+}
+
+export async function savePdfSummary({
+  userId,
+  fileUrl,
+  summary,
+  title,
+  fileName,
+}: PDFSummary) {
+  try {
+    const sql = await getDatabaseConnection();
+    await sql`
+      INSERT INTO pdf_summaries 
+        (user_id, original_file_url, summary_text, title, file_name)
+      VALUES 
+        (
+          ${userId},
+          ${fileUrl},
+          ${summary},
+          ${title},
+          ${fileName}
+        );
+    `;
+    return {
+      success: true,
+      message: "PDF summary saved successfully!",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Problem occurred to store PDF in database!",
+    };
+  }
+}
+
+export async function storePdfSummaryAction({
+  fileUrl,
+  summary,
+  title,
+  fileName,
+}: PDFSummary) {
+  let savePdfSummaryResponse;
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return {
+        success: false,
+        message: "User have to be authenticated!",
+      };
+    }
+    savePdfSummaryResponse = await savePdfSummary({
+      userId,
+      fileUrl,
+      summary,
+      title,
+      fileName,
+    });
+    if (!savePdfSummaryResponse) {
+      return {
+        success: false,
+        message: "Failed to save PDF summary, please try again!",
+      };
+    }
+    return {
+      success: true,
+      message: "PDF summary saved successfully!",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Problem occurred to store PDF in database!",
     };
   }
 }

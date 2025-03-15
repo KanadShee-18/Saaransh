@@ -1,6 +1,9 @@
 "use client";
 
-import { generatePdfSummary } from "@/actions/upload-actions";
+import {
+  generatePdfSummary,
+  storePdfSummaryAction,
+} from "@/actions/upload-actions";
 import { useUploadThing } from "@/utils/uploadthing";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -101,10 +104,43 @@ export const UploadForm = () => {
             </span>
           ),
         });
-        formRef.current?.reset();
+
         if (data.summary) {
           // save the summary to the database
+          const storedResult = await storePdfSummaryAction({
+            summary: data.summary,
+            fileUrl: resp[0].serverData.file.url,
+            title: data.title,
+            fileName: file.name,
+          });
+
+          if (storedResult.success) {
+            toast.message(
+              <span className="text-indigo-500">✨Summary Generated!</span>,
+              {
+                description: (
+                  <span className="text-rose-400 font-medium">
+                    Your summary has been successfully summarized and saved!📝
+                  </span>
+                ),
+              }
+            );
+          } else {
+            toast.message(
+              <span className="text-rose-400 font-medium">
+                Failed to save summary!
+              </span>,
+              {
+                description: (
+                  <span className="text-slate-500 font-medium">
+                    Some error occurred from our end, please try again later!
+                  </span>
+                ),
+              }
+            );
+          }
         }
+        formRef.current?.reset();
       }
       setIsLoading(false);
     } catch (error) {
