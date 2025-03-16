@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 // @ts-ignore
 import { load } from "@cashfreepayments/cashfree-js";
+import { useUser } from "@clerk/nextjs";
 
 export default function PaymentPage() {
+  const { isSignedIn, user, isLoaded } = useUser();
+
   const searchParams = useSearchParams();
   const priceParam = searchParams.get("price");
   const plan = searchParams.get("plan");
@@ -29,13 +33,14 @@ export default function PaymentPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            order_id: `order_${Date.now()}`,
+            order_id: `order_${uuidv4()}`,
             order_amount: price,
-            customer_id: `cust_${Date.now()}`,
+            customer_id: `cust_${uuidv4()}`,
+            customer_email: user?.emailAddresses.toString(),
             customer_phone: "1234567890",
-            return_url: `${
-              window.location.origin
-            }/payment-success?order_id=order_${Date.now()}`,
+            // return_url: `${
+            //   window.location.origin
+            // }/payment-success?order_id=order_${Date.now()}`,
           }),
         });
 
@@ -90,6 +95,14 @@ export default function PaymentPage() {
       redirectTarget: "_self", // Open in the same tab
     });
   }, [paymentSessionId, cashfree]);
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isSignedIn) {
+    return <div>Sign in to view this page</div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">

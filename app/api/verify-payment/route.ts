@@ -1,7 +1,9 @@
+import { getDatabaseConnection } from "@/lib/db";
 import { USE_PAYMENT_MODE } from "@/utils/use-base-url";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+  const sql = await getDatabaseConnection();
   try {
     const { order_id } = await req.json();
 
@@ -41,6 +43,31 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
     console.log("✅ Cashfree API Response:", data);
+
+    if (data.order_status === "PAID") {
+      const { order_amount, order_currency, customer_details } = data;
+      const { customer_email } = customer_details;
+
+      // Insert into payment table
+      let newPlan = order_amount === 9 ? "basic" : "pro";
+
+      await sql`
+      INSERT INTO payments (cashfree_payment_id, amount, status, price_id,  user_email, created_at, updated_at)
+      VALUES (${order_id}, ${order_amount}, 'SUCCESS', ${newPlan}, ${customer_email}, NOW(), NOW())`;
+
+      // Update user status
+      await sql`
+        UPDATE users 
+        SET status = 'active', 
+        price_id = ${newPlan}, 
+        updated_at = NOW()
+        WHERE email = ${customer_email}`;
+
+      return NextResponse.json({
+        success: true,
+        message: "Payment verified and plan updated successfully!",
+      });
+    }
 
     return NextResponse.json({ success: true, data });
   } catch (error) {

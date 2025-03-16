@@ -1,10 +1,24 @@
 import { NextResponse } from "next/server";
 import { USE_BASE_URL } from "@/utils/use-base-url";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
   try {
-    const { order_id, order_amount, customer_id, customer_phone } =
-      await req.json();
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // const user = await sql`SELECT * FROM users WHERE id = ${userId}`;
+
+    const {
+      order_id,
+      order_amount,
+      customer_id,
+      customer_phone,
+      customer_email,
+    } = await req.json();
 
     console.log("Received payment request:", {
       order_id,
@@ -33,11 +47,11 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         order_id,
         order_amount: Number(order_amount),
-        order_currency: "USD",
+        order_currency: "INR",
         customer_details: {
           customer_id,
           customer_phone,
-          customer_email: "john.doe@example.com",
+          customer_email,
         },
         order_meta: {
           return_url: `${USE_BASE_URL}/payment-success?order_id=${order_id}`,
