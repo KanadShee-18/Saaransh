@@ -5,6 +5,7 @@ import { useState } from "react";
 import { NavigationControls } from "@/components/summary/nav-controllers";
 import { ProgressBar } from "@/components/summary/summary-progress-bar";
 import { parseSection } from "@/utils/summary-helpers";
+import ContentSection from "./summary-content-section";
 
 const SectionTitle = ({ title }: { title: string }) => {
   return (
@@ -38,11 +39,15 @@ export const SummaryViewer = ({ summary }: { summary: string }) => {
       <div className="h-fit overflow-y-auto scrollbar-hide pt-12 sm:pt-16 pb-20 sm:pb-24">
         <div className="px-4 sm:px-6">
           <SectionTitle title={sections[currentSection].title} />
-          <ul>
+          <ContentSection
+            title={sections[currentSection].title}
+            points={sections[currentSection].points}
+          />
+          {/* <ul>
             {sections[currentSection].points.map((point, index) => (
               <li key={index}>{point}</li>
             ))}
-          </ul>
+          </ul> */}
         </div>
       </div>
 
