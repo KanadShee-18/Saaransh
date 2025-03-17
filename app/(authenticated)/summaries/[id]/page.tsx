@@ -6,7 +6,7 @@ import { SummaryViewer } from "@/components/summary/summary-viewer";
 import { getSummaryById } from "@/lib/summaries";
 import { SUMMARY } from "@/utils/types";
 import { FileText } from "lucide-react";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function SummaryPage(props: {
   params: Promise<{ id: string }>;
@@ -15,7 +15,7 @@ export default async function SummaryPage(props: {
   const id = params.id;
   const summary: SUMMARY | null = await getSummaryById(id);
   if (!summary) {
-    notFound();
+    redirect("/");
   }
 
   const readingTime = Math.ceil((summary.word_count || 0) / 200);

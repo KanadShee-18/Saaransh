@@ -25,7 +25,7 @@ export const LoadingSkeleton = () => {
 
       {/* Loading Content */}
 
-      <div className="h-full overflow-y-auto scrollbar-hide pt-16 pb-24">
+      <div className="h-full overflow-y-auto pt-16 pb-24">
         <div className="px-6">
           {/* Loading Title */}
           <div className="flex flex-col gap-2 mb-6 sticky top-0 pt-2 pb-4 bg-background/80 backdrop-blur-xs z-10">

@@ -43,7 +43,7 @@ export const SummaryViewer = ({ summary }: { summary: string }) => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.2, ease: "easeInOut" }}
         exit={{ opacity: 0 }}
-        className="h-fit overflow-y-auto scrollbar-hide pt-12 sm:pt-16 pb-20 sm:pb-24"
+        className="h-fit overflow-y-auto pt-12 sm:pt-16 pb-20 sm:pb-24"
       >
         <div className="px-4 sm:px-6">
           <SectionTitle title={sections[currentSection].title} />
