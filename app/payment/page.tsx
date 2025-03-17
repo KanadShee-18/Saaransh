@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-// @ts-ignore - Cashfree SDK has incomplete or incorrect TypeScript definitions
+// @ts-expect-error - Cashfree SDK has incomplete or incorrect TypeScript definitions
 import { load } from "@cashfreepayments/cashfree-js";
 import { useUser } from "@clerk/nextjs";
 
@@ -18,7 +18,15 @@ function PaymentContent() {
   const [paymentSessionId, setPaymentSessionId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [cashfree, setCashfree] = useState<any>(null);
+  const [cashfree, setCashfree] = useState(null);
+
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user?.emailAddresses) {
+      setEmail(user.emailAddresses?.[0]?.emailAddress ?? null);
+    }
+  }, [user?.emailAddresses]);
 
   useEffect(() => {
     const createPaymentSession = async () => {
@@ -36,7 +44,7 @@ function PaymentContent() {
             order_id: `order_${uuidv4()}`,
             order_amount: price,
             customer_id: `cust_${uuidv4()}`,
-            customer_email: user?.emailAddresses.toString(),
+            customer_email: email,
             customer_phone: "1234567890",
           }),
         });
@@ -57,7 +65,7 @@ function PaymentContent() {
     };
 
     createPaymentSession();
-  }, [price, plan]);
+  }, [price, plan, email]);
 
   useEffect(() => {
     const initializeCashfree = async () => {
@@ -80,7 +88,7 @@ function PaymentContent() {
 
   useEffect(() => {
     if (!paymentSessionId || !cashfree) return;
-
+    // @ts-expect-error - Cashfree SDK has incomplete or incorrect TypeScript definitions
     cashfree.checkout({
       paymentSessionId,
       redirectTarget: "_self",

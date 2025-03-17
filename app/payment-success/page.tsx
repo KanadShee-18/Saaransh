@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -96,7 +96,7 @@ function PaymentSuccessContent() {
     };
 
     verifyPayment();
-  }, [orderId]);
+  }, [orderId, router]);
 
   return (
     <div className="flex p-4 flex-col items-center justify-start pt-12 sm:pt-24 min-h-screen">
@@ -137,8 +137,8 @@ function PaymentSuccessContent() {
             </h4>
           )}
           <p className="text-base text-gray-600 font-medium text-center bg-gradient-to-r from-slate-100 to-emerald-50 px-2 py-3 rounded-lg shadow-md hover:shadow-2xl transition-all duration-300">
-            Once your payment is being verified, you'll be redirected to your
-            dashboard. If not then click{" "}
+            Once your payment is being verified, you&apos;ll be redirected to
+            your dashboard. If not then click{" "}
             <span className="text-indigo-600 underline cursor-pointer">
               <Link href={"/dashboard"}>here</Link>
             </span>

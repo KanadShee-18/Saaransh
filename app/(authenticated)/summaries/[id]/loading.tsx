@@ -1,7 +1,6 @@
 import { BgGradient } from "@/components/common/bg-gradient";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LoadingSkeleton } from "@/components/upload/loading-skeleton";
-import { cn } from "@/lib/utils";
 import { FileText } from "lucide-react";
 
 function HeaderSkeleton() {
@@ -12,19 +11,6 @@ function HeaderSkeleton() {
         <Skeleton className="h-5 w-40 rounded-full bg-white/80" />
       </div>
       <Skeleton className="h-12 w-3/4 rounded-full bg-white/80" />
-    </div>
-  );
-}
-
-function ContentSkeleton() {
-  return (
-    <div className="space-y-4">
-      {[...Array(6)].map((_, index) => (
-        <Skeleton
-          key={index}
-          className={cn("h-4 bg-white/80", index % 2 === 0 ? "w-24" : "w-full")}
-        />
-      ))}
     </div>
   );
 }

@@ -9,7 +9,6 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
-  getPriceIdByEmail,
   hasReachedUploadLimit,
   UploadLimitResponse,
 } from "@/lib/user";
@@ -20,7 +19,6 @@ import {
   MotionP,
 } from "@/components/common/motion-wrapper";
 import { itemVariants } from "@/utils/constants";
-import DashboardLoading from "./loading";
 
 export default async function DashboardPage() {
   const user = await currentUser();

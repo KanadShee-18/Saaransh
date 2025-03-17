@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Loader2Icon, Trash2Icon, X } from "lucide-react";
+import { Loader2Icon, Trash2Icon } from "lucide-react";
 import {
   Dialog,
   DialogClose,

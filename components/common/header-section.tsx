@@ -4,7 +4,6 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { UserPlanBadge } from "@/components/common/plan-badge";
 
 export const Header = () => {
-  const isLoggedIn = false;
   return (
     <nav className="container flex items-center justify-between py-4 lg:px-8 px-2 mx-auto">
       <div>

@@ -45,11 +45,11 @@ export async function POST(req: NextRequest) {
     console.log("✅ Cashfree API Response:", data);
 
     if (data.order_status === "PAID") {
-      const { order_amount, order_currency, customer_details } = data;
+      const { order_amount, customer_details } = data;
       const { customer_email, customer_id } = customer_details;
 
       // Insert into payment table
-      let newPlan = order_amount === 99 ? "basic" : "pro";
+      const newPlan = order_amount === 99 ? "basic" : "pro";
 
       await sql`
       INSERT INTO payments (cashfree_payment_id, amount, status, price_id,  user_email, created_at, updated_at)

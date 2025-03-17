@@ -1,6 +1,5 @@
 import { BgGradient } from "@/components/common/bg-gradient";
 import { MotionDiv } from "@/components/common/motion-wrapper";
-import { Badge } from "@/components/ui/badge";
 import { UploadForm } from "@/components/upload/upload-form";
 import { UploadHeader } from "@/components/upload/upload-header-section";
 import { containerVariants } from "@/utils/constants";

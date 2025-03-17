@@ -71,7 +71,7 @@ export const UploadForm = () => {
       toast.message("🌨️Uploading PDF", {
         description: (
           <span className="text-rose-400 font-medium">
-            We're uploading your file, this may take a few seconds
+            We&apos;re uploading your file, this may take a few seconds
           </span>
         ),
       });
@@ -127,7 +127,7 @@ export const UploadForm = () => {
         fileName: formattedFileName,
       });
 
-      let savingToast = toast.message(
+      const savingToast = toast.message(
         <span className="text-indigo-500">Saving📩 PDF Summary</span>,
         {
           description: (

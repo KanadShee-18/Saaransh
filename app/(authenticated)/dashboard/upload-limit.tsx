@@ -44,7 +44,7 @@ export const UploadLimitReached = ({
         <p className="text-sm font-medium md:leading-normal leading-7">
           {uploadLimitResponse.allowed ? (
             <>
-              You've used {uploadCount} out of {limit} uploads on the Basic
+              You&apos;ve used {uploadCount} out of {limit} uploads on the Basic
               plan.
             </>
           ) : (

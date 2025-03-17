@@ -38,7 +38,6 @@ const RegularPoint = ({ point }: { point: string }) => {
 };
 
 export default function ContentSection({
-  title,
   points,
 }: {
   title: string;
