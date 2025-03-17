@@ -1,11 +1,16 @@
 import { Sparkles } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { MotionDiv } from "@/components/common/motion-wrapper";
+import { itemVariants } from "@/utils/constants";
 
 export const UploadHeader = () => {
   return (
     <>
       <div className="flex items-center justify-center">
-        <div className="relative p-[1px] overflow-hidden rounded-full bg-linear-to-r from-rose-200 via-rose-500 to-rose-800 animate-gradient-x group">
+        <MotionDiv
+          variants={itemVariants}
+          className="relative p-[1px] overflow-hidden rounded-full bg-linear-to-r from-rose-200 via-rose-500 to-rose-800 animate-gradient-x group"
+        >
           <Badge
             variant={"secondary"}
             className="relative px-6 py-2 text-base font-medium bg-white rounded-full group-hover:bg-rose-200 transition-colors duration-200"
@@ -15,9 +20,12 @@ export const UploadHeader = () => {
               AI-Powered PDF Summarizer
             </p>
           </Badge>
-        </div>
+        </MotionDiv>
       </div>
-      <div className="flex flex-col capitalize items-center justify-center space-y-4 mt-12">
+      <MotionDiv
+        variants={itemVariants}
+        className="flex flex-col capitalize items-center justify-center space-y-4 mt-12"
+      >
         <h1 className="text-4xl text-slate-800 font-bold text-center">
           Start Uploading{" "}
           <span className="inline-block relative">
@@ -28,10 +36,12 @@ export const UploadHeader = () => {
             ></span>{" "}
           </span>
         </h1>
-        <p className="text-center mt-2 text-lg leading-8 text-gray-600 max-w-2xl font-medium">
-          Upload your PDF and let our AI do the magic! ✨
-        </p>
-      </div>
+        <MotionDiv variants={itemVariants}>
+          <p className="text-center mt-2 text-lg leading-8 text-gray-600 max-w-2xl font-medium">
+            Upload your PDF and let our AI do the magic! ✨
+          </p>
+        </MotionDiv>
+      </MotionDiv>
     </>
   );
 };

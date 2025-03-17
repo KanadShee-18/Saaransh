@@ -14,6 +14,12 @@ import {
   UploadLimitResponse,
 } from "@/lib/user";
 import { UploadLimitReached } from "./upload-limit";
+import {
+  MotionDiv,
+  MotionH1,
+  MotionP,
+} from "@/components/common/motion-wrapper";
+import { itemVariants } from "@/utils/constants";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -37,36 +43,59 @@ export default async function DashboardPage() {
         <div className="px-2 py-12 sm:py-24">
           <div className="flex flex-col md:flex-row gap-4 mb-8 justify-between">
             <div className="flex flex-col gap-2">
-              <h1 className="bg-gradient-to-r from-gray-600 to-slate-900 text-transparent bg-clip-text text-4xl tracking-tight font-bold">
+              <MotionH1
+                variants={itemVariants}
+                initial="hidden"
+                whileInView={"visible"}
+                className="bg-gradient-to-r from-gray-600 to-slate-900 text-transparent bg-clip-text text-4xl tracking-tight font-bold"
+              >
                 Your Summaries
-              </h1>
-              <p className="font-semibold text-gray-600">
+              </MotionH1>
+              <MotionP
+                variants={itemVariants}
+                initial="hidden"
+                animate={"visible"}
+                className="font-semibold text-gray-600"
+              >
                 Transform your PDFs into{" "}
                 <span className="text-rose-500">concise, actionable</span>{" "}
                 insights with your friend{" "}
                 <span className="text-rose-500">Saaransh</span>
-              </p>
+              </MotionP>
             </div>
 
-            <Button
-              className="group w-full md:w-auto hover:no-underline linear-gradient-to-r from-rose-500 to-rose-700 hover:from-rose-900 hover:to-rose-500 hover:scale-105 transition-all duration-300"
-              variant={"link"}
+            <MotionDiv
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{ scale: 1.05 }}
+              className="self-start"
             >
-              <Link
-                href="/upload"
-                className="flex items-center gap-2 text-white no-underline"
+              <Button
+                className="group w-full md:w-auto hover:no-underline linear-gradient-to-r from-rose-500 to-rose-700 hover:from-rose-900 hover:to-rose-500 hover:scale-105 transition-all duration-300"
+                variant={"link"}
               >
-                <PlusIcon className="!w-5 !h-5 group-hover:scale-110 transition-all duration-300" />
-                New Summary
-              </Link>
-            </Button>
+                <Link
+                  href="/upload"
+                  className="flex items-center gap-2 text-white no-underline"
+                >
+                  <PlusIcon className="!w-5 !h-5 group-hover:scale-110 transition-all duration-300" />
+                  New Summary
+                </Link>
+              </Button>
+            </MotionDiv>
           </div>
 
-          <div className="mb-6">
+          <MotionDiv
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="mb-6"
+          >
             <UploadLimitReached uploadLimitResponse={uploadLimitResponse} />
-          </div>
+          </MotionDiv>
 
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 sm:px-0">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 sm:px-0 md:pt-10 pt-6">
             {summaries.length > 0 ? (
               summaries.map((summary, index) => (
                 <SummaryCard key={index} summary={summary} />

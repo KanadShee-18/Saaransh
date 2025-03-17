@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { formatFileName } from "@/utils/format-filename";
 import { SUMMARY } from "@/utils/types";
+import { MotionDiv } from "@/components/common/motion-wrapper";
+import { itemVariants } from "@/utils/constants";
 
 const SummaryHeader = ({
   fileUrl,
@@ -50,7 +52,13 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 export const SummaryCard = ({ summary }: { summary: SUMMARY }) => {
   return (
-    <div>
+    <MotionDiv
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+    >
       <Card className="relative h-full">
         <div className="absolute top-2 right-2">
           <DeleteBtn summaryId={summary.id} />
@@ -71,6 +79,6 @@ export const SummaryCard = ({ summary }: { summary: SUMMARY }) => {
           </div>
         </Link>
       </Card>
-    </div>
+    </MotionDiv>
   );
 };
