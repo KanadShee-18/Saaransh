@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { toast } from "sonner";
-export default function PaymentSuccess() {
+
+function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
@@ -32,7 +33,6 @@ export default function PaymentSuccess() {
         const res = await axios.post("/api/verify-payment", {
           order_id: orderId,
         });
-        console.log("Data from verify-payment: ", res.data);
 
         if (res?.data?.success) {
           setStatus("VERIFIED");
@@ -69,7 +69,6 @@ export default function PaymentSuccess() {
 
         if (axios.isAxiosError(error)) {
           if (error.response) {
-            // Handle specific HTTP error codes
             if (error.response.status === 404) {
               errorMessage = "Order not found. Please check your order ID.";
             } else if (error.response.status === 400) {
@@ -147,5 +146,19 @@ export default function PaymentSuccess() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PaymentSuccess() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }

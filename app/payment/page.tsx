@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { redirect, useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-// @ts-ignore
+// @ts-ignore - Cashfree SDK has incomplete or incorrect TypeScript definitions
 import { load } from "@cashfreepayments/cashfree-js";
 import { useUser } from "@clerk/nextjs";
 
-export default function PaymentPage() {
+function PaymentContent() {
   const { isSignedIn, user, isLoaded } = useUser();
-
   const searchParams = useSearchParams();
+
   const priceParam = searchParams.get("price");
   const plan = searchParams.get("plan");
 
@@ -38,14 +38,10 @@ export default function PaymentPage() {
             customer_id: `cust_${uuidv4()}`,
             customer_email: user?.emailAddresses.toString(),
             customer_phone: "1234567890",
-            // return_url: `${
-            //   window.location.origin
-            // }/payment-success?order_id=order_${Date.now()}`,
           }),
         });
 
         const data = await response.json();
-        console.log("Cashfree API Response:", data);
 
         if (data.data?.payment_session_id) {
           setPaymentSessionId(data.data.payment_session_id);
@@ -63,11 +59,9 @@ export default function PaymentPage() {
     createPaymentSession();
   }, [price, plan]);
 
-  // Load Cashfree SDK once when component mounts
   useEffect(() => {
     const initializeCashfree = async () => {
       try {
-        console.log("🚀 Initializing Cashfree...");
         const cashfreeInstance = await load({
           mode:
             process.env.NEXT_PUBLIC_CASHFREE_MODE === "TEST"
@@ -84,15 +78,12 @@ export default function PaymentPage() {
     initializeCashfree();
   }, []);
 
-  // Trigger payment when session ID is available
   useEffect(() => {
     if (!paymentSessionId || !cashfree) return;
 
-    console.log("✅ Cashfree SDK loaded. Starting payment...");
-
     cashfree.checkout({
       paymentSessionId,
-      redirectTarget: "_self", // Open in the same tab
+      redirectTarget: "_self",
     });
   }, [paymentSessionId, cashfree]);
 
@@ -101,16 +92,23 @@ export default function PaymentPage() {
   }
 
   if (!isSignedIn) {
-    return <div>Sign in to view this page</div>;
+    redirect("/sign-in");
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-2xl font-bold mb-4">Payment for {plan}</h1>
       <p className="text-lg mb-4">Amount: ₹{price}</p>
-
       {loading && <p>Loading payment gateway...</p>}
       {error && <p className="text-red-500">{error}</p>}
     </div>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={<div>Loading payment page...</div>}>
+      <PaymentContent />
+    </Suspense>
   );
 }

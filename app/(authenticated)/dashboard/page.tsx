@@ -35,8 +35,6 @@ export default async function DashboardPage() {
     email
   );
 
-  console.log("Upload limit response: ", uploadLimitResponse);
-
   return (
     <main className="min-h-screen">
       <BgGradient className="from-emerald-200 via-teal-200 to-cyan-200" />

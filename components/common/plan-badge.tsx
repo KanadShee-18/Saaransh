@@ -24,7 +24,6 @@ export const UserPlanBadge = async () => {
     (plan) => plan.priceId.toLowerCase() === priceId?.toLowerCase()
   );
 
-  console.log("Plan in homepage: ", plan);
 
   if (plan) {
     planName = plan.name;

@@ -33,19 +33,18 @@ export const UploadForm = () => {
 
   const { user } = useUser();
 
-  const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
+  const { startUpload } = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
-      console.log("Uploaded successfully!");
+      toast.message("PDFUploaded successfully!");
     },
     onUploadError: (err) => {
-      console.log("Error occurred while uploading!");
       toast.error("Error occurred while uploading!", {
         description: err.message,
       });
     },
-    onUploadBegin: (file) => {
-      console.log("Upload has begun for ", file);
-    },
+    // onUploadBegin: (file) => {
+    //   console.log("Upload has begun for ", file);
+    // },
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,8 +75,6 @@ export const UploadForm = () => {
           </span>
         ),
       });
-
-      console.log("Upload started ...");
 
       // upload the pdf to uploadthing
       const resp = await startUpload([file]);
