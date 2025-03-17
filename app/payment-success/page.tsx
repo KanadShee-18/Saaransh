@@ -34,7 +34,7 @@ export default function PaymentSuccess() {
         });
         console.log("Data from verify-payment: ", res.data);
 
-        if (res?.data?.success && res?.data?.data?.order_status === "PAID") {
+        if (res?.data?.success) {
           setStatus("VERIFIED");
           setIsLoading(false);
           toast.message(

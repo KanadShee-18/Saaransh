@@ -2,6 +2,7 @@ import Image from "next/image";
 import SAARANSH_LOGO from "@/public/images/saaransh-logo.png";
 import { NavLink } from "./nav-links";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { UserPlanBadge } from "@/components/common/plan-badge";
 
 export const Header = () => {
   const isLoggedIn = false;
@@ -29,7 +30,7 @@ export const Header = () => {
         <SignedIn>
           <div className="flex gap-2 items-center">
             <NavLink href={"/upload"}>Upload a PDF</NavLink>
-            <div>Pro</div>
+            <UserPlanBadge />
             <SignedIn>
               <UserButton />
             </SignedIn>

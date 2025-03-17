@@ -4,8 +4,9 @@ import { getDatabaseConnection } from "@/lib/db";
 import { generateSummaryFromGemini } from "@/lib/geminiai";
 import { fetchExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
+import { hasReachedUploadLimit } from "@/lib/user";
 import { formatFileNameAsTitle } from "@/utils/format-filename";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 interface PDFSummary {
@@ -14,6 +15,7 @@ interface PDFSummary {
   summary: string;
   title: string;
   fileName: string;
+  email?: string;
 }
 
 export async function generatePdfSummary(
@@ -47,6 +49,27 @@ export async function generatePdfSummary(
     return {
       success: false,
       message: "File Upload Failed!",
+      data: null,
+    };
+  }
+
+  const user = await currentUser();
+  const email = user?.emailAddresses?.[0]?.emailAddress;
+  if (!email) {
+    return {
+      success: false,
+      message: "User email not found!",
+      data: null,
+    };
+  }
+
+  // Check if the user has reached their upload limit
+  const uploadLimitResponse = await hasReachedUploadLimit(email);
+
+  if (!uploadLimitResponse.allowed) {
+    return {
+      success: false,
+      message: "Upload limit reached for today!",
       data: null,
     };
   }
@@ -114,19 +137,21 @@ export async function savePdfSummary({
   summary,
   title,
   fileName,
+  email,
 }: PDFSummary) {
   try {
     const sql = await getDatabaseConnection();
     const result = await sql`
       INSERT INTO pdf_summaries 
-        (user_id, original_file_url, summary_text, title, file_name)
+        (user_id, original_file_url, summary_text, title, file_name, email)
       VALUES 
         (
           ${userId},
           ${fileUrl},
           ${summary},
           ${title},
-          ${fileName}
+          ${fileName},
+          ${email}
         ) RETURNING id, summary_text;
     `;
     console.log("result saved in db: ", result);
@@ -154,6 +179,7 @@ export async function storePdfSummaryAction({
   summary,
   title,
   fileName,
+  email,
 }: PDFSummary) {
   // let savePdfSummaryResponse;
   let savePdfSummaryResponse: {
@@ -170,12 +196,19 @@ export async function storePdfSummaryAction({
         message: "User have to be authenticated!",
       };
     }
+    if (!email) {
+      return {
+        success: false,
+        message: "Email is required to save PDF summary!",
+      };
+    }
     savePdfSummaryResponse = await savePdfSummary({
       userId,
       fileUrl,
       summary,
       title,
       fileName,
+      email,
     });
     console.log("savePdfSummaryResponse: ", savePdfSummaryResponse);
     if (!savePdfSummaryResponse) {

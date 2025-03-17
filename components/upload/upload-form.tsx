@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import UploadFormInput from "@/components/upload/upload-form-input";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 const schema = z.object({
   file: z
@@ -26,6 +27,8 @@ export const UploadForm = () => {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { user } = useUser();
 
   const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
@@ -98,6 +101,20 @@ export const UploadForm = () => {
         { serverData: resp[0].serverData },
       ]);
       console.log("Summary: ", result);
+      if (!result.success) {
+        toast.message(
+          <span className="text-indigo-600 font-medium">
+            Problem Occurred! ⚠️
+          </span>,
+          {
+            description: (
+              <span className="text-rose-400 font-medium">
+                {result.message}
+              </span>
+            ),
+          }
+        );
+      }
 
       toast.dismiss(processingToast);
 
@@ -119,6 +136,7 @@ export const UploadForm = () => {
             fileUrl: resp[0].serverData.file.url,
             title: data.title,
             fileName: file.name,
+            email: user?.emailAddresses[0].emailAddress,
           });
 
           if (storedResult.success) {

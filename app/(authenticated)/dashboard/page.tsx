@@ -5,9 +5,15 @@ import { Button } from "@/components/ui/button";
 import { getSummaries } from "@/lib/summaries";
 import { SUMMARY } from "@/utils/types";
 import { currentUser } from "@clerk/nextjs/server";
-import { ArrowRight, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import {
+  getPriceIdByEmail,
+  hasReachedUploadLimit,
+  UploadLimitResponse,
+} from "@/lib/user";
+import { UploadLimitReached } from "./upload-limit";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -15,8 +21,14 @@ export default async function DashboardPage() {
   if (!userId) {
     return redirect("/sign-in");
   }
-  const uploadLimit = 5;
+  const email = user?.emailAddresses?.[0]?.emailAddress;
   const summaries: SUMMARY[] = await getSummaries(userId);
+
+  const uploadLimitResponse: UploadLimitResponse = await hasReachedUploadLimit(
+    email
+  );
+
+  console.log("Upload limit response: ", uploadLimitResponse);
 
   return (
     <main className="min-h-screen">
@@ -49,22 +61,11 @@ export default async function DashboardPage() {
               </Link>
             </Button>
           </div>
+
           <div className="mb-6">
-            <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 text-rose-800">
-              <p className="text-sm font-medium md:leading-normal leading-7">
-                You've reached the limit of {uploadLimit} uploads on the Basic
-                plan.
-                <Link
-                  href={"/#pricing"}
-                  className="mx-2 bg-rose-100 hover:bg-rose-300 shadow-sm shadow-rose-300 hover:shadow-rose-500 transition-all duration-300 px-2 py-1 gap-1 rounded-lg group"
-                >
-                  Upgrade to Pro{" "}
-                  <ArrowRight className="!size-4 inline-block group-hover:translate-x-1 transition-all duration-300" />{" "}
-                </Link>
-                for unlimited uploads.
-              </p>
-            </div>
+            <UploadLimitReached uploadLimitResponse={uploadLimitResponse} />
           </div>
+
           <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 sm:px-0">
             {summaries.length > 0 ? (
               summaries.map((summary, index) => (
