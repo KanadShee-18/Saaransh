@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Source_Sans_3 as FontSans } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/common/header-section";
-import { Footer } from "@/components/common/footer-section";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { ORIGIN_URL } from "@/utils/helpers";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -36,6 +36,17 @@ export const metadata: Metadata = {
     "PDF Summarizer Online Tool",
     "PDF Summarizer Online Tool",
   ],
+  openGraph: {
+    images: [
+      {
+        url: "/opengraph-image.png",
+      },
+    ],
+  },
+  metadataBase: new URL(ORIGIN_URL),
+  alternates: {
+    canonical: ORIGIN_URL,
+  },
 };
 
 export default function RootLayout({
