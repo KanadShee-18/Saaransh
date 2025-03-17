@@ -2,6 +2,7 @@
 
 import {
   generatePdfSummary,
+  generatePdfText,
   storePdfSummaryAction,
 } from "@/actions/upload-actions";
 import { useUploadThing } from "@/utils/uploadthing";
@@ -12,6 +13,7 @@ import UploadFormInput from "@/components/upload/upload-form-input";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSkeleton } from "@/components/upload/loading-skeleton";
+import { formatFileNameAsTitle } from "@/utils/format-filename";
 
 const schema = z.object({
   file: z
@@ -95,79 +97,89 @@ export const UploadForm = () => {
         ),
       });
 
-      console.log("Processing PDF text ...");
-
-      // parse the pdf text
-      const result = await generatePdfSummary([
-        { serverData: resp[0].serverData },
-      ]);
-      console.log("Summary: ", result);
-      if (!result.success) {
-        toast.message(
-          <span className="text-indigo-600 font-medium">
-            Problem Occurred! ⚠️
-          </span>,
-          {
-            description: (
-              <span className="text-rose-400 font-medium">
-                {result.message}
-              </span>
-            ),
-          }
-        );
-      }
-
       toast.dismiss(processingToast);
 
-      const { data = null, message = null } = result || {};
-      if (data) {
-        toast.message("⤵️ Saving PDF", {
+      // call the AI service
+      const formattedFileName = formatFileNameAsTitle(file.name);
+
+      toast.message(<span className="text-indigo-500">🔍 Parsing PDF</span>, {
+        description: (
+          <span className="text-rose-400 font-medium">
+            We are parsing your PDF, this may take a few seconds
+          </span>
+        ),
+      });
+
+      const result = await generatePdfText({
+        fileUrl: resp[0].serverData.file.url,
+      });
+
+      toast.message(
+        <span className="text-indigo-500">✨Generating PDF Summary</span>,
+        {
           description: (
             <span className="text-rose-400 font-medium">
-              Hang tight! We're saving your summary! ✨
+              Summary from your PDF📝 is being generated...
             </span>
           ),
+        }
+      );
+
+      const summaryResult = await generatePdfSummary({
+        pdfText: result?.data?.pdfText ?? "",
+        fileName: formattedFileName,
+      });
+
+      let savingToast = toast.message(
+        <span className="text-indigo-500">Saving📩 PDF Summary</span>,
+        {
+          description: (
+            <span className="text-rose-400 font-medium">
+              We are saving your summary .....
+            </span>
+          ),
+        }
+      );
+
+      const { data = null } = summaryResult || {};
+      if (data?.summary) {
+        // save the summary to the database
+        const storedResult = await storePdfSummaryAction({
+          summary: data.summary,
+          fileUrl: resp[0].serverData.file.url,
+          title: formattedFileName,
+          fileName: file.name,
+          email: user?.emailAddresses[0].emailAddress,
         });
 
-        if (data.summary) {
-          console.log("Saving summary to database ...");
-          // save the summary to the database
-          const storedResult = await storePdfSummaryAction({
-            summary: data.summary,
-            fileUrl: resp[0].serverData.file.url,
-            title: data.title,
-            fileName: file.name,
-            email: user?.emailAddresses[0].emailAddress,
-          });
-
-          if (storedResult.success) {
-            toast.message(
-              <span className="text-indigo-500">✨Summary Generated!</span>,
-              {
-                description: (
-                  <span className="text-rose-400 font-medium">
-                    Your summary has been successfully summarized and saved!📝
-                  </span>
-                ),
-              }
-            );
-            formRef.current?.reset();
-            // redirect to the summary[id] page
-            router.push(`/summaries/${storedResult?.data?.id}`);
-          } else {
-            toast.message(
-              <span className="text-rose-400 font-medium">
-                Failed to save summary!
-              </span>,
-              {
-                description: (
-                  <span className="text-slate-500 font-medium">
-                    Some error occurred from our end, please try again later!
-                  </span>
-                ),
-              }
-            );
-          }
+        if (storedResult.success) {
+          toast.dismiss(savingToast);
+          toast.message(
+            <span className="text-indigo-500">✨Summary Generated!</span>,
+            {
+              description: (
+                <span className="text-rose-400 font-medium">
+                  Your summary has been successfully summarized and saved!📝
+                </span>
+              ),
+            }
+          );
+          formRef.current?.reset();
+          // redirect to the summary[id] page
+          router.push(`/summaries/${storedResult?.data?.id}`);
+        } else {
+          toast.message(
+            <span className="text-rose-400 font-medium">
+              Failed to save summary!
+            </span>,
+            {
+              description: (
+                <span className="text-slate-500 font-medium">
+                  Some error occurred from our end, please try again later!
+                </span>
+              ),
+            }
+          );
         }
         formRef.current?.reset();
       }

@@ -18,34 +18,12 @@ interface PDFSummary {
   email?: string;
 }
 
-export async function generatePdfSummary(
-  uploadResponse: [
-    {
-      serverData: {
-        userId: string;
-        file: {
-          url: string;
-          name: string;
-        };
-      };
-    }
-  ]
-) {
-  if (!uploadResponse) {
-    return {
-      success: false,
-      message: "File Upload Failed!",
-      data: null,
-    };
-  }
-  const {
-    serverData: {
-      userId,
-      file: { url: pdfUrl, name: pdfName },
-    },
-  } = uploadResponse[0];
-
-  if (!pdfUrl) {
+export async function generatePdfText({
+  fileUrl
+}: {
+  fileUrl: string;
+}) {
+  if (!fileUrl) {
     return {
       success: false,
       message: "File Upload Failed!",
@@ -75,9 +53,40 @@ export async function generatePdfSummary(
   }
 
   try {
-    const pdfText = await fetchExtractPdfText(pdfUrl);
+    const pdfText = await fetchExtractPdfText(fileUrl);
     console.log("PDF Text: ", pdfText);
+    if (!pdfText) {
+      return {
+        success: false,
+        message: "Failed to fetch and extract text from PDF!",
+        data: null,
+      };
+    }
+    return {
+      success: true,
+      message: "Pdf text has been generated successfully!",
+      data: {
+        pdfText,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Pdf text extraction failed!",
+      data: null,
+    };
+  }
+}
 
+export async function generatePdfSummary({
+  pdfText,
+  fileName,
+}: {
+  pdfText: string;
+  fileName: string;
+}) {
+  try {
     let summary;
     try {
       summary = await generateSummaryFromOpenAI(pdfText);
@@ -110,14 +119,11 @@ export async function generatePdfSummary(
         data: null,
       };
     }
-
-    const formattedFileName = formatFileNameAsTitle(pdfName);
-
     return {
       success: true,
       message: "Summary has been generated successfully!",
       data: {
-        title: formattedFileName,
+        title: fileName,
         summary,
       },
     };
