@@ -47,6 +47,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
+          suppressHydrationWarning
           className={`${fontSans.variable} font-sans selection:bg-[#f7d4bf] antialiased`}
         >
           <div className="relative flex flex-col min-h-screen">

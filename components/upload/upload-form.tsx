@@ -11,6 +11,7 @@ import { z } from "zod";
 import UploadFormInput from "@/components/upload/upload-form-input";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { LoadingSkeleton } from "@/components/upload/loading-skeleton";
 
 const schema = z.object({
   file: z
@@ -210,6 +211,7 @@ export const UploadForm = () => {
               </span>
             </div>
           </div>
+          <LoadingSkeleton />
         </>
       )}
     </div>

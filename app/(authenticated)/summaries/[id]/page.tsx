@@ -7,6 +7,7 @@ import { getSummaryById } from "@/lib/summaries";
 import { SUMMARY } from "@/utils/types";
 import { FileText } from "lucide-react";
 import { notFound } from "next/navigation";
+import SummaryLoading from "./loading";
 
 export default async function SummaryPage(props: {
   params: Promise<{ id: string }>;
