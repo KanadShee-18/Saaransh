@@ -1,5 +1,4 @@
 import Image from "next/image";
-import SAARANSH_LOGO from "@/public/images/saaransh-logo.png";
 import { NavLink } from "./nav-links";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { UserPlanBadge } from "@/components/common/plan-badge";
@@ -11,7 +10,7 @@ export const Header = () => {
       <div>
         <NavLink href={"/"}>
           <Image
-            src={SAARANSH_LOGO}
+            src={"/images/saaransh-logo.png"}
             alt="Saaransh"
             width={150}
             height={100}
