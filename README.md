@@ -1,6 +1,6 @@
 # Saaransh - Transform PDFs into an easy-to-read breautiful reel of impactful summaries with the power of AI!
 
-- [Visit to Saaransh](https://saaransh-ai.vercel.app/)
+- [🌏Visit to Saaransh](https://saaransh-ai.vercel.app/)
 
 ### Built with Next.js 15 App Router, Clerk for Authentication, React 19, OpenAI GPT-4, Langchain, ShadcN UI Components, Tailwind CSS 4, NeonDB, UploadThing, Cashfree for payments, Typescript, TailwindCSS and more.
 
@@ -12,7 +12,7 @@
 
 - [Features](#-features)
   - [Core technologies I used](#-core-technologies)
-  - [Core technologies I used](#-application-features)
+  - [Application Features](#-application-features)
 - [Visual Captures](#-screenshots)
 - [Getting Started](#-getting-started)
 - [Fork & Clone Repo](#-how-to-fork-and-clone)
