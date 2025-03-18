@@ -57,7 +57,7 @@ function PaymentContent() {
           throw new Error(data.error || "Payment initiation failed.");
         }
       } catch (error) {
-        console.error("Payment initiation error:", error);
+        // console.error("Payment initiation error:", error);
         setError(error instanceof Error ? error.message : "Unexpected error.");
       } finally {
         setLoading(false);
@@ -78,8 +78,8 @@ function PaymentContent() {
         });
         setCashfree(cashfreeInstance);
       } catch (error) {
-        console.error("❌ Cashfree SDK error:", error);
-        setError("Error loading Cashfree SDK.");
+        // console.error("❌ Cashfree SDK error:", error);
+        setError(error instanceof Error ? error.message : "Unexpected error.");
       }
     };
 

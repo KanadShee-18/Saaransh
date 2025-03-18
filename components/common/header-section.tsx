@@ -10,7 +10,7 @@ export const Header = () => {
       <div>
         <NavLink href={"/"}>
           <Image
-            src={"/images/saaransh-logo.png"}
+            src={"/logo.png"}
             alt="Saaransh"
             width={150}
             height={100}
