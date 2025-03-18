@@ -61,22 +61,23 @@ Here are some previews of the application:
 
 - A beautiful minimalistic landing page
 
-  - ![Home Page](public/screenshots/landing.png)
+![Home Page](public/screenshots/landing.png)
 
 - Cool looking pricing cards to buy plans
 
-  - ![Pricing](public/screenshots/pricing.png)
+![Pricing](public/screenshots/pricing.png)
 
 - A simple UI to upload PDFs
 
-  - ![Upload](public/screenshots/upload.png)
+![Upload](public/screenshots/upload.png)
 
 - Beautiful dashboard to view all of the summaries
 
-  - ![Dashboard](public/screenshots/dashboard.png)
+![Dashboard](public/screenshots/dashboard.png)
 
 - A single summary id page to read AI generated summary
-  - ![Summary Viewer](public/screenshots/summary-viewer.png)
+
+![Summary Viewer](public/screenshots/summary-viewer.png)
 
 ---
 
