@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 @theme {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -45,6 +51,14 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-rotate-border: border-rotate 4s linear infinite;
+
+  @keyframes border-rotate {
+    to {
+      --border-angle: 360deg;
+    }
+  }
 }
 
 /*
@@ -194,4 +208,92 @@
 
 .animate-gradient-x {
   animation: gradient-x 3s ease infinite;
+}
+
+/* .aiSummaryBadge {
+  position: relative;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background-color: white/80;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.aiSummaryBadge::after,
+.aiSummaryBadge::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-image: conic-gradient(from var(--angle), transparent 70%, blue);
+  border-radius: 12px;
+  z-index: -1;
+  animation: 3s spin linear infinite;
+}
+
+.aiSummaryBadge::before {
+  filter: blur(1.5rem);
+  opacity: 0.5;
+}
+
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+} */
+
+.aiSummaryBadge {
+  position: relative;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Corrected the background color */
+  overflow: hidden; /* Ensure the pseudo-elements don't overflow the badge */
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.aiSummaryBadge::after,
+.aiSummaryBadge::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-image: conic-gradient(from var(--angle), transparent 70%, blue);
+  border-radius: 12px;
+  z-index: -1;
+  animation: 3s spin linear infinite;
+}
+
+.aiSummaryBadge::before {
+  filter: blur(1.5rem);
+  opacity: 0.5;
+}
+
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
 }

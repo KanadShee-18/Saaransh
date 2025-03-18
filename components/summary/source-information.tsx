@@ -19,7 +19,7 @@ export const SourceInfo = ({
     <div className="flex flex-col lg:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
       <div className="flex items-center justify-center gap-2">
         <FileText className="!size-4 text-rose-400" />
-        <span>Source: {fileName}</span>
+        <span className="font-medium">Source: {fileName}</span>
       </div>
       <div className="flex gap-2">
         <Button
@@ -33,7 +33,7 @@ export const SourceInfo = ({
             View Original
           </a>
         </Button>
-        <DownloadSummaryButton 
+        <DownloadSummaryButton
           fileName={fileName}
           title={title}
           summaryText={summaryText}

@@ -4,7 +4,7 @@ export const getPriceIdByEmail = async (email: string) => {
   const sql = await getDatabaseConnection();
 
   const query =
-    await sql`SELECT price_id FROM users where email = ${email} AND status = 'active'`;
+    await sql`SELECT price_id FROM users where email = ${email} AND status = 'active' ORDER BY created_at DESC LIMIT 1`;
 
   return query?.[0]?.price_id || null;
 };

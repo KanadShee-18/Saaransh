@@ -35,7 +35,9 @@ export const UploadForm = () => {
 
   const { startUpload } = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
-      toast.message("PDFUploaded successfully!");
+      toast.message(
+        <span className="text-rose-400">Pdf Uploaded successfully!</span>
+      );
     },
     onUploadError: (err) => {
       toast.error("Error occurred while uploading!", {
@@ -99,13 +101,16 @@ export const UploadForm = () => {
       // call the AI service
       const formattedFileName = formatFileNameAsTitle(file.name);
 
-      toast.message(<span className="text-indigo-500">🔍 Parsing PDF</span>, {
-        description: (
-          <span className="text-rose-400 font-medium">
-            We are parsing your PDF, this may take a few seconds
-          </span>
-        ),
-      });
+      toast.message(
+        <span className="text-indigo-500">🔍 Parsing Content From PDF</span>,
+        {
+          description: (
+            <span className="text-rose-400 font-medium">
+              We are parsing content from your PDF, this may take a few seconds
+            </span>
+          ),
+        }
+      );
 
       const result = await generatePdfText({
         fileUrl: resp[0].serverData.file.url,

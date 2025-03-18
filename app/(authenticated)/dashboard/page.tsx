@@ -8,10 +8,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import {
-  hasReachedUploadLimit,
-  UploadLimitResponse,
-} from "@/lib/user";
+import { hasReachedUploadLimit, UploadLimitResponse } from "@/lib/user";
 import { UploadLimitReached } from "./upload-limit";
 import {
   MotionDiv,
@@ -89,8 +86,15 @@ export default async function DashboardPage() {
           </div>
 
           <MotionDiv
-            variants={itemVariants}
-            initial="hidden"
+            // variants={itemVariants}
+            initial={{ opacity: 0, x: -300 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.6,
+              type: "spring",
+              stiffness: 70,
+              // damping: 35,
+            }}
             animate="visible"
             className="mb-6"
           >

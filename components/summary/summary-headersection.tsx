@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Calendar, ChevronLeftIcon, Clock, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 export const SummaryHeader = ({
   title,
@@ -15,14 +14,15 @@ export const SummaryHeader = ({
   return (
     <div className="flex gap-4 mb-4 justify-between">
       <div className="space-y-6">
-        <div className="flex flex-wrap items-center gap-4">
-          <Badge
-            variant={"secondary"}
-            className="relative px-4 py-1.5 text-sm font-medium bg-white/80 backdrop-blur-xs rounded-full hover:bg-white/90 transition-all duration-200 shadow-xs hover:shadow-md"
-          >
-            <Sparkles className="!size-4 mr-1.5 text-rose-500 animate-pulse" />
-            AI Summary
-          </Badge>
+        <div className="flex flex-wrap items-center gap-4 text-sm ml-3">
+          <div className="transition-all duration-300 hover:scale-105 cursor-pointer">
+            <div className="p-0.5 animate-rotate-border bg-conic/[from_var(--border-angle)] from-emerald-400 via-rose-400 to-emerald-400 rounded-lg">
+              <span className="w-fit rounded-lg bg-white flex gap-1 items-center text-slate-700 font-semibold px-2 py-1">
+                <Sparkles className="!size-4 mr-1.5 text-rose-500 animate-pulse" />
+                AI Summary
+              </span>
+            </div>
+          </div>
           <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
             <Calendar className="!size-4 text-rose-400" />
             {new Date(createdAt).toLocaleDateString("en-US", {

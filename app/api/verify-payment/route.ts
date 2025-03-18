@@ -51,8 +51,10 @@ export async function POST(req: NextRequest) {
       // Insert into payment table
       const newPlan = order_amount === 99 ? "basic" : "pro";
 
+      console.log("Customer email is: ", customer_email);
+
       await sql`
-      INSERT INTO payments (cashfree_payment_id, amount, status, price_id,  user_email, created_at, updated_at)
+      INSERT INTO payments (cashfree_payment_id, amount, status, price_id, user_email, created_at, updated_at)
       VALUES (${order_id}, ${order_amount}, 'SUCCESS', ${newPlan}, ${customer_email}, NOW(), NOW())`;
 
       await sql`
