@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Saaransh - Transform PDFs into an easy-to-read breautiful reel of impactful summaries with the power of AI!
 
-## Getting Started
+- [Visit to Saaransh](https://saaransh-ai.vercel.app/)
 
-First, run the development server:
+### Built with Next.js 15 App Router, Clerk for Authentication, React 19, OpenAI GPT-4, Langchain, ShadcN UI Components, Tailwind CSS 4, NeonDB, UploadThing, Cashfree for payments, Typescript, TailwindCSS and more.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Saaransh](public/opengraph-image.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Table Of Contents:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Features](#-features)
+  - [Core technologies I used](#-core-technologies)
+  - [Core technologies I used](#-application-features)
+- [Visual Captures](#-screenshots)
+- [Getting Started](#-getting-started)
+- [Fork & Clone Repo](#-how-to-fork-and-clone)
+- [Acknowledgements](#-acknowledgements)
+- [License](#-license)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ⚡ Features:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🪢 Core Technologies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 🚀 **Next.js 15 App Router** - Server-side rendering, routing, and API endpoints with Server Components.
+- ❄️ **React** - Interactive user interfaces with reusable components.
+- 🔑 **Clerk** - Secure authentication with Passkeys, GitHub, and Google Sign-in.
+- 🤖 **GPT-4** - AI-powered summarization with contextual understanding and emoji-enhanced output.
+- 📄 **Langchain** - PDF parsing, text extraction, and document chunking.
+- 🎨 **ShadCN UI** - Accessible, customizable React components.
+- 🗄️ **NeonDB (PostgreSQL)** - Serverless database for summaries and user data.
+- 📤 **UploadThing** - Secure PDF uploads (up to 32MB) and file management.
+- 💳 **Cashfree** - Secure and ease payment processing.
+- 🛠 **TypeScript** - Static typing for enhanced development experience.
+- 🎨 **TailwindCSS 4** - Utility-first, responsive styling.
 
-## Deploy on Vercel
+### 💫 Application Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 📝 **Clear, structured summaries** with key points and insights.
+- 🎨 **Beautiful, interactive summary viewer** with progress tracking.
+- 🔒 **Secure file handling** and processing.
+- 🔐 **Protected routes and API endpoints** for authentication and security.
+- 💲 **Flexible pricing plans** (Basic and Pro).
+- 📩 **Webhook implementation** to store the clerk user to our own database.
+- 🖥️ **User dashboard** for managing summaries.
+- 📱 **Responsive design** for mobile and desktop.
+- 🔄 **Real-time updates** and path revalidation.
+- 🚀 **Production-ready deployment**.
+- 🔔 **Toast notifications** for upload status, processing updates, and error handling.
+- ⚡ **Performance optimizations**.
+- 🌎 **SEO-friendly** summary generation.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📸 Screenshots
+
+Here are some previews of the application:
+
+- A beautiful minimalistic landing page
+
+  - ![Home Page](public/images/screenshots/landing.png)
+
+- Cool looking pricing cards to buy plans
+
+  - ![Pricing](public/images/screenshots/pricing.png)
+
+- A simple UI to upload PDFs
+
+  - ![Upload](public/images/screenshots/upload.png)
+
+- Beautiful dashboard to view all of the summaries
+
+  - ![Dashboard](public/images/screenshots/dashboard.png)
+
+- A single summary id page to read AI generated summary
+  - ![Summary Viewer](public/images/screenshots/summary-viewer.png)
+
+---
+
+## 🛠 Getting Started
+
+To get started with this project:
+
+1. **Fork the repository**.
+2. **Add .env file to your project**:
+
+   > Take reference from **env_example.txt**
+
+3. **Create the required credentials**:
+   - OpenAI API key
+   - Clerk authentication setup
+   - UploadThing configuration
+   - Cashfree payment setup
+   - NeonDB database connection
+
+---
+
+## 🌱 How to Fork and Clone
+
+1. Click the "Fork" button in the top right corner of this repository to create your own copy
+2. Clone your forked repository to your local machine
+3. Install dependencies with `npm install`
+   - If not work for some dependencies, use `npm install <name> --force` or `npm install <name> --legacy-peer-deps`
+4. Set up your environment variables
+5. Run the development server with `npm run dev`
+
+---
+
+## 🙏 Acknowledgements
+
+- [Clerk](https://go.clerk.com/5q0WrFA) for authentication
+- [OpenAI](https://openai.com) for GPT-4 API
+- [Langchain](https://js.langchain.com) for document processing
+- [ShadCN UI](https://ui.shadcn.com/) for components
+
+---
+
+## 📜 License
+
+[MIT LICENSE](LICENSE)
