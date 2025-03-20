@@ -16,7 +16,7 @@ export const SummaryHeader = ({
       <div className="space-y-6">
         <div className="flex flex-wrap items-center gap-4 text-sm ml-3">
           <div className="transition-all duration-300 hover:scale-105 cursor-pointer">
-            <div className="p-0.5 animate-rotate-border bg-conic/[from_var(--border-angle)] from-emerald-400 via-rose-400 to-emerald-400 rounded-lg">
+            <div className="p-0.5 bg-gradient-to-br from-amber-300 via-emerald-300 to-indigo-300 rounded-lg">
               <span className="w-fit rounded-lg bg-white flex gap-1 items-center text-slate-700 font-semibold px-2 py-1">
                 <Sparkles className="!size-4 mr-1.5 text-rose-500 animate-pulse" />
                 AI Summary
